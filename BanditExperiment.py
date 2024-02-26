@@ -85,7 +85,7 @@ if __name__ == '__main__':
     comparison = ComparisonPlot(title="Comparison")
     # egreedy
     epsilons = [0.01, 0.05, 0.1, 0.25]
-    LC_egreedy = LearningCurvePlot(title="Learning Curve OIPolicy")
+    LC_egreedy = LearningCurvePlot(title="Learning Curve eGreedyPolicy")
     accumulated_rewards = np.zeros(4)
     for i in range(len(epsilons)):
         rewards,accumulated_reward = egreedy_experiment(epsilons[i], n_actions=n_actions,n_timesteps=n_timesteps,
