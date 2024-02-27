@@ -64,6 +64,32 @@ class UCBPolicy:
         # TO DO: Add own code
         self.counts[a] += 1
         self.Q[a] = self.Q[a] + (1/self.counts[a])*(r-self.Q[a])
+    '''
+    def __init__(self, n_actions=10):
+        self.n_actions = n_actions
+        self.q=np.zeros(n_actions) #the means Q(a)
+        self.n=np.zeros(n_actions) #counts n(a)
+
+    def select_action(self, c, t):
+        action_values = []
+        for a in range(self.n_actions):
+            if self.n[a] == 0:
+                action_values.append(float('inf'))
+            else:
+                exploration_value = c * np.sqrt(np.log(t) / self.n[a])
+                action_values.append(self.q[a] + exploration_value)
+        return np.argmax(action_values)
+
+
+
+    def update(self,a,r):
+
+        #n(a)=n(a)+1
+        self.n[a]= self.n[a]+1
+
+        #Q(a)=Q(a)+ 1/(n(a)) [r(a)-Q(a)]
+        self.q[a]= self.q[a] + (1/self.n[a]) * (r-self.q[a]) '''
+
     
 def test():
     n_actions = 10

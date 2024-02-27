@@ -64,7 +64,7 @@ def UCB_experiment(c, n_actions, n_timesteps, n_repetitions, smoothing_window):
         env = BanditEnvironment(n_actions)
         ucb = UCBPolicy(n_actions)
         for j in range(n_timesteps):
-            a = ucb.select_action(c, t=j)
+            a = ucb.select_action(c, t=j+1)
             r = env.act(a)
             ucb.update(a, r)
             rewards[i, j] = r
@@ -94,7 +94,7 @@ if __name__ == '__main__':
         y = rewards[x]
         accumulated_rewards[i] += accumulated_reward
         LC_egreedy.add_curve(y, label=f'epsilon={epsilons[i]}')
-    x1 =  epsilons #[np.log(j) for j in epsilons]
+    x1 =  epsilons
     y1 = np.divide(accumulated_rewards,(n_repetitions * n_timesteps))
     comparison.add_curve(x1, y1, label='e-Greedy')
     LC_egreedy.save(name='eGreedy.png')
@@ -110,9 +110,9 @@ if __name__ == '__main__':
         y = rewards[x]
         accumulated_rewards[i] += accumulated_reward
         LC_oi.add_curve(y, label=f'initial value={initial_values[i]}')
-    x2 = initial_values #[np.log(j) for j in initial_values]
+    x2 = initial_values
     y2 = np.divide(accumulated_rewards,(n_repetitions * n_timesteps))
-    comparison.add_curve(x2, y2, label='UCB')
+    comparison.add_curve(x2, y2, label='greedy with optimal initialization, α = 0.1')
     LC_oi.save(name='OI.png')
 
     # UCBPolicy
@@ -120,15 +120,15 @@ if __name__ == '__main__':
     LC_ucb = LearningCurvePlot(title="Learning Curve UCBPolicy")
     accumulated_rewards = np.zeros(6)
     for i in range(len(c_values)):
-        rewards, accumulated_reward = OI_experiment(c_values[i], n_actions=n_actions,n_timesteps=n_timesteps,
+        rewards, accumulated_reward = UCB_experiment(c_values[i], n_actions=n_actions,n_timesteps=n_timesteps,
                    n_repetitions=n_repetitions,smoothing_window=smoothing_window)
         x = np.arange(1000)
         y = rewards[x]
         accumulated_rewards[i] += accumulated_reward
         LC_ucb.add_curve(y, label=f'c={c_values[i]}')
-    x3 = c_values #[np.log(j) for j in c_values]
+    x3 = c_values
     y3 = np.divide(accumulated_rewards,(n_repetitions * n_timesteps))
-    comparison.add_curve(x3, y3, label='greedy with optimal initialization, α = 0.1')
+    comparison.add_curve(x3, y3, label='UCB')
     LC_ucb.save(name='UCB.png')
 
     # Comparison
